@@ -48,7 +48,17 @@ function App() {
   };
 
   const deleteTodo = (id: number) => {
-    setTodos(todos.filter(todo => todo.id !== id));
+    fetch(`/api/todos/${id}`, {
+      method: 'DELETE',
+    })
+      .then(response => {
+        if (response.status === 204) {
+          setTodos(prevTodos => prevTodos.filter(todo => todo.id !== id));
+        } else {
+          console.error('Error deleting todo:', response.statusText);
+        }
+      })
+      .catch(error => console.error('Error deleting todo:', error));
   };
 
   return (

@@ -1,13 +1,35 @@
 package main
 
-import "github.com/gin-gonic/gin"
+import (
+	"net/http"
+
+	"github.com/gin-gonic/gin"
+)
+
+// Todo represents a todo item
+type Todo struct {
+	ID        int64  `json:"id"`
+	Text      string `json:"text"`
+	Completed bool   `json:"completed"`
+}
+
+var todos = []Todo{}
+
+func setupRouter() *gin.Engine {
+	router := gin.Default()
+
+	api := router.Group("/api")
+	{
+		api.GET("/todos", getTodos)
+	}
+	return router
+}
 
 func main() {
-  router := gin.Default()
-  router.GET("/ping", func(c *gin.Context) {
-    c.JSON(200, gin.H{
-      "message": "pong",
-    })
-  })
-  router.Run()
+	router := setupRouter()
+	router.Run()
+}
+
+func getTodos(c *gin.Context) {
+	c.JSON(http.StatusOK, todos)
 }

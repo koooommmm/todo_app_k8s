@@ -13,7 +13,7 @@ function App() {
   const [todos, setTodos] = useState<Todo[]>([]);
 
   useEffect(() => {
-    fetch('http://localhost:8080/api/todos')
+    fetch('/api/todos')
       .then(response => response.json())
       .then((data: Todo[]) => setTodos(data))
       .catch(error => console.error('Error fetching todos:', error));
@@ -25,7 +25,7 @@ function App() {
       completed: false,
     };
 
-    fetch('http://localhost:8080/api/todos', {
+    fetch('/api/todos', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

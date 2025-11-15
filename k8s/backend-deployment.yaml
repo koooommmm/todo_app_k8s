@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: backend
-        image: todo-backend:v2
+        image: todo-backend
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8080

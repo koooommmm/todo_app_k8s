@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: todo-frontend:v1
+        image: todo-frontend
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 80

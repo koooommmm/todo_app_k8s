@@ -1,21 +1,42 @@
-import { useState } from 'react';
+interface Todo {
+  id: number;
+  text: string;
+  completed: boolean;
+}
+
+import { useState, useEffect } from 'react';
 import './App.css';
 import AddTodoForm from './components/AddTodoForm';
 import TodoList from './components/TodoList';
 
 function App() {
-  const [todos, setTodos] = useState([
-    { id: 1, text: 'Learn React', completed: false },
-    { id: 2, text: 'Build a Todo App', completed: true },
-  ]);
+  const [todos, setTodos] = useState<Todo[]>([]);
+
+  useEffect(() => {
+    fetch('http://localhost:8080/api/todos')
+      .then(response => response.json())
+      .then((data: Todo[]) => setTodos(data))
+      .catch(error => console.error('Error fetching todos:', error));
+  }, []);
 
   const addTodo = (text: string) => {
     const newTodo = {
-      id: Date.now(),
       text,
       completed: false,
     };
-    setTodos([...todos, newTodo]);
+
+    fetch('http://localhost:8080/api/todos', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(newTodo),
+    })
+      .then(response => response.json())
+      .then((data: Todo) => {
+        setTodos(prevTodos => [...prevTodos, data]);
+      })
+      .catch(error => console.error('Error adding todo:', error));
   };
 
   const toggleTodo = (id: number) => {
